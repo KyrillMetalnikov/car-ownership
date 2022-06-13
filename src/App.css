@@ -1,29 +1,53 @@
+input {
+  display :block;
+  margin: auto;
+}
+
+body {
+  position:flex;
+  margin:auto;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.edit, .delete {
+  display: inline;
+  float: right;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-float infinite 3s ease-in-out;
-  }
+.peoples {
+  display: flexbox;
+  list-style: none;
 }
 
-.App-header {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.person, .car {
+  list-style: none;
+  padding: 10px;
+  margin: 10px;
+  width: 90%;
 }
 
-.App-link {
-  color: rgb(112, 76, 182);
+.person {
+  border: 1px solid red;
+}
+
+.car {
+  border: 1px solid green;
+}
+
+.peopleDetails {
+  text-align: left;
+  display: inline;
+}
+
+.selectForm {
+  margin: auto;
+  display: block;
+  width: 178px;
+  padding: 2px;
+
 }
 
 @keyframes App-logo-float {
