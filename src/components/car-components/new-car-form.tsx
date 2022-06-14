@@ -15,7 +15,7 @@ export function CarForm() {
 
 
   function createCar(data:any) {
-    if (data.person_id) {
+    if (person_id) {
       axios
       .post(baseURL + person_id + '/cars', {
         ...data
