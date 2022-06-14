@@ -10,7 +10,6 @@ import { isEmptyObject } from '../../utils/utils';
 export function DisplayCar(car:any) {
     car = car.car
     const [showEdit, toggleShowEdit] = useState(false);
-    const [person_id, setPersonId]  = React.useState(null);
 
     const { handleSubmit, register, formState: { errors } } = useForm();
     const baseURL = "http://localhost:3000/people/"
@@ -24,6 +23,7 @@ export function DisplayCar(car:any) {
         actions.push({ label: person.first_name + ' ' + person.last_name, value: person.id})
     ))
     const peopleIndex = actions.findIndex((action: any) => action.value===car.person_id);
+    const [person_id, setPersonId]  = React.useState(actions[peopleIndex].value);
 
     function updateCar(data:any) {
         axios
@@ -32,7 +32,7 @@ export function DisplayCar(car:any) {
             person_id: person_id
         })
 
-        if (!isEmptyObject(errors)) {
+        if (isEmptyObject(errors)) {
             toggleShowEdit(false);
         }
     }
@@ -73,7 +73,7 @@ export function DisplayCar(car:any) {
         </li>}
         {showEdit && <div className="car">
             <form onSubmit={handleSubmit(updateCar)}>
-                <input type="number" defaultValue={car.year.toString()} {...register("year", {required: true, min: 1800, maxLength: 4})} />
+                <input type="number" defaultValue={car.year.toString()} {...register("year", {required: true, min: 0, maxLength: 4})} />
                 <input type="text" defaultValue={car.make} {...register("make", {required: true, maxLength: 100})} />
                 <input type="text" defaultValue={car.model} {...register("model", {required: true, maxLength: 100})} />
                 <input type="number" defaultValue={car.price.toString()} {...register("price", {required: true, min: 0})} />
