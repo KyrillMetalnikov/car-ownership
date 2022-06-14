@@ -1,41 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { Cars } from '../../interfaces/car-interface';
 import { DisplayCar } from '../car-components/display-car';
 import { useForm } from 'react-hook-form';
+import { isEmptyObject } from '../../utils/utils';
 
 export function DisplayPerson(person:any) {
-    interface People {
-        first_name: string;
-        last_name: string;
-        email: string;
-        id: number;
-        cars: Array<Cars>,
-    }
-
     person = person.person;
-    const defaultPeople:People[] = [];
 
-    const { handleSubmit, register } = useForm();
+    const { handleSubmit, register, formState: { errors } } = useForm();
     const [showEdit, toggleShowEdit] = useState(false);
-    const [people, setPeople] : [People[], (people: People[]) => void] = React.useState(defaultPeople);
-    const [error, setError]: [string, (error: string) => void] = React.useState("");
     const [showModal, toggleShowModal] = useState(false);
     const baseURL = "http://localhost:3000/people/";
-
-    React.useEffect(() => {
-        axios
-            .get<People[]>(baseURL)
-            .then(response => {
-                setPeople(response.data);
-            })
-            .catch(ex => {
-                const error = ex.response.status === 404
-                    ? "Resource Not found"
-                    : "An unexpected error has occured";
-                    setError(error);
-            });
-    }, []);
 
     function handleClose() { 
         toggleShowModal(false);
@@ -56,7 +32,7 @@ export function DisplayPerson(person:any) {
     }
 
     return (<>
-            {!showEdit && <li className="person" key={person.id}>
+            {!showEdit && <li className="person">
                 <div className="peopleDetails">
                     <span>{person.first_name} {person.last_name} </span>
                     <span>{person.email}</span>
@@ -65,7 +41,9 @@ export function DisplayPerson(person:any) {
                 <button className="delete" onClick={() => toggleShowModal(true)}>Delete</button>
                 <ul className="cars">
                     {person.cars.map((singleCar:Cars) => (
-                        <DisplayCar car={singleCar} />
+                        <div key={singleCar.id}>
+                            <DisplayCar car={singleCar} />
+                        </div>
                     ))}
                 </ul>
                 {showModal && 
@@ -90,6 +68,7 @@ export function DisplayPerson(person:any) {
                         <input type="text" defaultValue={person.email} {...register("email", {required: true, maxLength: 100})} />
 
                         <input type="submit" />
+                        {!isEmptyObject(errors) && <div className="error">All values must be filled out</div>}
                     </form>
                     <button onClick={() => toggleShowEdit(false)}>Cancel</button>
                 </div>}

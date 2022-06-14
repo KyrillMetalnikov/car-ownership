@@ -1,11 +1,11 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { isEmptyObject } from '../../utils/utils';
 
 
 export function PersonForm() {
     const baseURL = "http://localhost:3000/people"
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
   
     function createPerson(data:any) {
       axios
@@ -22,6 +22,7 @@ export function PersonForm() {
           <input type="text" placeholder="Email" {...register("email", {required: true, pattern: /^\S+@\S+$/i})} />
     
           <input type="submit" />
+          {!isEmptyObject(errors) && <div className="error">All values must be filled out</div>}
         </form>
       </div>);
   }

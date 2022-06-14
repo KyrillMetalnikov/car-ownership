@@ -1,35 +1,29 @@
 import React, { useState } from 'react';
-import { People } from '../../interfaces/people-interface';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import './delete-car-modal.css';
+import { useAppSelector } from '../../app/hooks';
+import { selectPeople } from '../../store/peopleSlice';
+import { isEmptyObject } from '../../utils/utils';
 
 export function DisplayCar(car:any) {
     car = car.car
     const [showEdit, toggleShowEdit] = useState(false);
     const [person_id, setPersonId]  = React.useState(null);
 
-    const { handleSubmit, register } = useForm();
+    const { handleSubmit, register, formState: { errors } } = useForm();
     const baseURL = "http://localhost:3000/people/"
 
     const [showModal, toggleShowModal] = useState(false);
-
-    const defaultPeople:People[] = [];
-    const [people, setPeople] : [People[], (people: People[]) => void] = React.useState(defaultPeople);
+    let people = useAppSelector(selectPeople);
+    
     let actions:any= [];
-
-    React.useEffect(() => {
-        axios
-            .get<People[]>(baseURL)
-            .then(response => {
-                setPeople(response.data);
-            })
-    }, []);
 
     people.map((person) => (
         actions.push({ label: person.first_name + ' ' + person.last_name, value: person.id})
     ))
+    const peopleIndex = actions.findIndex((action: any) => action.value===car.person_id);
 
     function updateCar(data:any) {
         axios
@@ -38,7 +32,9 @@ export function DisplayCar(car:any) {
             person_id: person_id
         })
 
-        toggleShowEdit(false);
+        if (!isEmptyObject(errors)) {
+            toggleShowEdit(false);
+        }
     }
 
     function deleteCar() {
@@ -55,7 +51,7 @@ export function DisplayCar(car:any) {
     }
 
     return(<>
-        {!showEdit && <li className="car" key={car.id}>
+        {!showEdit && <li className="car">
             {car.year + ' '}
             {car.make + ' '}
             {car.model + ' '}
@@ -82,9 +78,10 @@ export function DisplayCar(car:any) {
                 <input type="text" defaultValue={car.model} {...register("model", {required: true, maxLength: 100})} />
                 <input type="number" defaultValue={car.price.toString()} {...register("price", {required: true, min: 0})} />
                 <div className="selectForm">
-                    <Select  options={ actions } onChange={onChangeHandler} />
+                    <Select  options={ actions } onChange={onChangeHandler} defaultValue={ actions[peopleIndex] }/>
                 </div>
                 <input type="submit" />
+                {!isEmptyObject(errors) && <div className="error">Missing values or year/price is less than 0</div>}
             </form>
             <button onClick={() => toggleShowEdit(false)}>Cancel</button>
         </div>}
