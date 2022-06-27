@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import Select from 'react-select';
 import { useAppSelector } from "../../app/hooks";
-import { UpdateCarProps } from "../../interfaces/update-car-props";
+import { UpdateCarProps } from "../../interfaces/props/update-car-props";
 import { selectPeople } from "../../store/peopleSlice";
 import { baseURL, isEmptyObject } from "../../utils/utils";
 

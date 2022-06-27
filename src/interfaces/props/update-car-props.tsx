@@ -1,4 +1,4 @@
-import { Cars } from "./car-interface";
+import { Cars } from "../car-interface";
 
 export interface UpdateCarProps {
     toggle: Function;
