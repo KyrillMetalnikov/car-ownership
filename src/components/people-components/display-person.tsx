@@ -4,10 +4,9 @@ import { Cars } from '../../interfaces/car-interface';
 import { DisplayCar } from '../car-components/display-car';
 import { useForm } from 'react-hook-form';
 import { isEmptyObject } from '../../utils/utils';
+import { People } from '../../interfaces/people-interface';
 
-export function DisplayPerson(person:any) {
-    person = person.person;
-
+export function DisplayPerson(person: People) {
     const { handleSubmit, register, formState: { errors } } = useForm();
     const [showEdit, toggleShowEdit] = useState(false);
     const [showModal, toggleShowModal] = useState(false);
@@ -42,7 +41,7 @@ export function DisplayPerson(person:any) {
                 <ul className="cars">
                     {person.cars.map((singleCar:Cars) => (
                         <div key={singleCar.id}>
-                            <DisplayCar car={singleCar} />
+                            <DisplayCar {...singleCar} />
                         </div>
                     ))}
                 </ul>

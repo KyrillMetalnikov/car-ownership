@@ -4,4 +4,5 @@ export interface Cars {
     model: string;
     make: string;
     id: number;
+    person_id: number;
 }

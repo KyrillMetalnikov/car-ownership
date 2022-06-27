@@ -5,3 +5,5 @@ export function isEmptyObject(obj:Object) {
         return false;
     }
 }
+
+export const baseURL = "http://localhost:3000/people/";
